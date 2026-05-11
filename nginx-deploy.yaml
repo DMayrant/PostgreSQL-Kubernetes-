@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-web
+  name: nginx-web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-web
+  template:
+    metadata:
+      labels:
+        app: nginx-web
+    spec:
+      serviceAccountName: trivy
+      automountServiceAccountToken: false
+      containers:
+        - image: nginx:1.29.0
+          name: nginx
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: "256Mi"
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+          livenessProbe:
+            httpGet:
+              port: 80
+              path: /
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              port: 80
+              path: /
+            initialDelaySeconds: 15
+            periodSeconds: 20

@@ -1,0 +1,9 @@
+trivy: 
+  ignoreUnfixed: true
+
+operator:
+  scanjobTimeout: 5m 
+
+serviceMonitor:
+  enabled: true
+ 
